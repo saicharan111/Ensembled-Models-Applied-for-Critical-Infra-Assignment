@@ -155,26 +155,3 @@ df5[i,5]<-a5$table[1,2]
 df5[i,6]<-a5$table[2,1]
 
 }
-
-#################### PCA ######################3
-
-apply(HW_TESLA,2,var)
-pca =prcomp(HW_TESLA[,2:133]) 
-std_dev = pca$sdev
-pr_var = std_dev^2
-prop_varex <- pr_var/sum(pr_var)
-
-# Simple plot b/w Principal Components and Variance.
-#plot(cumsum(prop_varex), xlab = "Principal Component", 
-#     ylab = "Cumulative Proportion of Variance Explained", type = "b")
-
-# First 20 to 30 Principle Components are accountable for almost 100 % of the variance
-# So we are considering only those 15 Principle Components For classification
-
-### C5.0 for PCA based Results ###
-fit1.c50 <- train(STATIC~., data=trainSplit[,1:25], method="C5.0", metric=metric, trControl=control)
-### Testing C50 ####
-c50Pred1<-predict(fit1.c50,testSplit[,1:25])
-confusionMatrix(c50Pred1,testSplit$STATIC)
-print(sprintf("False Positive Ratio: %f", a$table[1,2]/(a$table[1,2]+a$table[2,2])))
-print(sprintf("False Negative Ratio: %f", a$table[2,1]/(a$table[2,1]+a$table[1,1])))
